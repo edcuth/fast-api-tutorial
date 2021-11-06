@@ -1,5 +1,7 @@
 from sqlalchemy.engine import base
-from sqlalchemy.sql.schema import Column
+from sqlalchemy.orm import relationship
+from sqlalchemy.sql.schema import Column, ForeignKey
+from sqlalchemy.util.compat import FullArgSpec
 from .database import Base
 from sqlalchemy import column, Integer, String, Boolean
 from sqlalchemy.sql.sqltypes import TIMESTAMP
@@ -13,6 +15,10 @@ class Post(Base):
     content = Column(String, nullable=False)
     published = Column(Boolean, server_default='TRUE', nullable=True)
     created_at = Column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()'))
+    owner_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    
+    owner = relationship("User")
+
 
 class User(Base):
     __tablename__ = "users"
@@ -22,3 +28,11 @@ class User(Base):
     password = Column(String, nullable=False)
     created_at = Column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()'))
 
+
+class Votes(Base):
+    __tablename__ = 'votes'
+
+    post_id = Column(Integer, ForeignKey('posts.id', ondelete='CASCADE'), primary_key=True, nullable=False)
+    user_id = Column(Integer, ForeignKey('users.id', ondelete="Cascade"), primary_key=True, nullable=False)
+    owner = relationship('User')
+    post = relationship('Post')

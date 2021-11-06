@@ -14,6 +14,9 @@ router = APIRouter(
 @router.post("/", status_code=status.HTTP_201_CREATED, response_model=schema.UserOut)
 async def create_user(user: schema.UserCreate, db: Session = Depends(get_db)):
     # hash user.password
+    new_user = db.query(models.User).filter(models.User.email == user.email).first()
+    if new_user:
+        raise HTTPException(status_code=status.HTTP_406_NOT_ACCEPTABLE, detail=f'mail already registered')
     user.password = utils.hash(user.password)
     new_user = models.User(**user.dict())
     db.add(new_user)
@@ -30,6 +33,3 @@ async def get_user(id: int, db: Session = Depends(get_db)):
     
     return user
 
-@router.get('/login')
-async def login_user():
-    pass
