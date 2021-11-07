@@ -5,6 +5,7 @@ import time
 import psycopg2
 from psycopg2.extras import RealDictCursor
 
+"""
 while True:
     try:
         conn = psycopg2.connect(host='localhost', database='fastapi', user='postgres', password='postgres123', cursor_factory=RealDictCursor)
@@ -15,7 +16,8 @@ while True:
         print('DB conn failed')
         print(error)
         time.sleep(2)
-    
+"""
+
 router = APIRouter(
     #this variable allows us to remove repeated text from the path
     prefix='/posts',
