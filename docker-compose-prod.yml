@@ -1,0 +1,47 @@
+version: "3"
+# docker-compose up [--build] to force it build a new image after changes
+# need to add the -f flag to specify the file to use
+services:
+  # name of the service
+  api:
+    # we won't build the image in production, instead we pull it from docker hub
+    image: 'dockerhub user'/'name of the image':'specific version'
+    # build: . 
+    depends_on:
+      - postgres
+    ports:
+      # this forwards port requests to the container
+      # format: <local port>:<port on container>
+      - 80:8000
+    # volumes: # commented out since we won't change code in production
+      # mount bind to sync a local directory with a contained one, can add the :ro flag
+      # to make it read only
+      # for an app running on uvicorn, we need to add the --reload flag to the cmd
+      # so it restarts when we do changes.
+      
+      #- ./:/usr/src/app:ro
+    # or add a command to overwrite the cmd in Dockerfile
+    #command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    #env_file:
+    #  - ./.env
+    environment:
+      # to reference env vars you use the ${varname} sintax
+      - DATABASE_HOSTNAME=${DATABASE_HOSTNAME}
+      - DATABASE_PORT=${DATABASE_PORT}
+      - DATABSE_PASSWORD=${DATABSE_PASSWORD}
+      - DATABASE_NAME=${DATABASE_NAME}
+      - DATABASE_USERNAME=${DATABASE_USERNAME}
+      - SECRET_KEY=${SECRET_KEY}
+      - ALGORITHM=${ALGORITHM}
+      - ACCESS_TOKEN_EXPIRE_MINUTES=${ACCESS_TOKEN_EXPIRE_MINUTES}
+
+  postgres:
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+      - POSTGRES_DB=${DATABASE_NAME}
+    volumes:
+      - postgres-db: /var/lib/postgresql/data
+
+volumes:
+  postgres-db:

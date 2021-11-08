@@ -1,0 +1,44 @@
+version: "3"
+# docker-compose up [--build] to force it build a new image after changes
+# need to add the -f flag to specify the file to use
+services:
+  # name of the service
+  api:
+    build: .
+    depends_on:
+      - postgres
+    ports:
+      # this forwards port requests to the container
+      # format: <local port>:<port on container>
+      - 8000:8000
+    volumes:
+      # mount bind to sync a local directory with a contained one, can add the :ro flag
+      # to make it read only
+      # for an app running on uvicorn, we need to add the --reload flag to the cmd
+      # so it restarts when we do changes.
+      
+      - ./:/usr/src/app:ro
+    # or add a command to overwrite the cmd in Dockerfile
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    #env_file:
+    #  - ./.env
+    environment:
+      - DATABASE_HOSTNAME=postgres
+      - DATABASE_PORT=5432
+      - DATABSE_PASSWORD=[replace with db password]
+      - DATABASE_NAME=fastapi
+      - DATABASE_USERNAME=postgres
+      - SECRET_KEY=[replace with secret key]
+      - ALGORITHM=HS256
+      - ACCESS_TOKEN_EXPIRE_MINUTES=30
+
+  postgres:
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=[replace with db password]
+      - POSTGRES_DB=fastapi
+    volumes:
+      - postgres-db: /var/lib/postgresql/data
+
+volumes:
+  postgres-db:
