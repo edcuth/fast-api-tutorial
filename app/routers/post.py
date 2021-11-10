@@ -7,7 +7,7 @@ from sqlalchemy import func
 
 router = APIRouter(
     #this variable allows us to remove repeated text from the path
-    prefix='/sqlalchemy/posts',
+    prefix='/posts',
     #the tags variable will let us separate our stuff by groups
     tags=['posts']
 )
