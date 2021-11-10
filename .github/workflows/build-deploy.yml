@@ -101,7 +101,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: [build]
-    entivonment:
+    environment:
       name: production  
     steps:
       - name: Pulling git repository
