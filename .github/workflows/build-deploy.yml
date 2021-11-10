@@ -1,0 +1,18 @@
+name: Build and Deploy Code
+
+on: [push, pull_request]
+# push:
+#    branches: 
+#      - "main"
+#  pull_request:
+#    branches:
+#      - "test_branch"
+# the reference tab in the github actions documentation covers this part
+jobs:
+  job1:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pulling git repository
+        uses: actions/checkout@v2
+      - name: This is a run command!
+        run: echo "hello world!"
