@@ -16,8 +16,10 @@ on: [push, pull_request]
 
 jobs:
   job1:
-    #environment: this let's us use a specific predefined environment in our repo
-      #name: testing like testing, in this case
+    #this let's us use a specific predefined environment in our repo
+    environment: 
+      #like the testing env, in this case
+      name: testing
     # these env vars are job specific
     # to access env vars, you'll use ${{[envvar_name]}}
     env:
@@ -25,6 +27,7 @@ jobs:
       DATABASE_HOSTNAME: ${{secrets.DATABASE_HOSTNAME}}
       DATABASE_PORT: ${{secrets.DATABASE_PORT}}
       DATABSE_PASSWORD: ${{secrets.DATABSE_PASSWORD}}
+      # envvar from the testing env
       DATABASE_NAME: ${{DATABASE_NAME}}
       DATABASE_USERNAME: ${{secrets.DATABASE_USERNAME}}
       SECRET_KEY: ${{secrets.SECRET_KEY}}
