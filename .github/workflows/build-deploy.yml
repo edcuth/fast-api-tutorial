@@ -19,7 +19,7 @@ jobs:
     #this let's us use a specific predefined environment in our repo
     environment: 
       #like the testing env, in this case
-      name: testing
+      name: Testing
     # these env vars are job specific
     # to access env vars, you'll use ${{[envvar_name]}}
     env:
@@ -28,11 +28,11 @@ jobs:
       DATABASE_PORT: ${{secrets.DATABASE_PORT}}
       DATABSE_PASSWORD: ${{secrets.DATABSE_PASSWORD}}
       # envvar from the testing env
-      DATABASE_NAME: ${{DATABASE_NAME}}
+      DATABASE_NAME: ${{secrets.DATABASE_NAME}}
       DATABASE_USERNAME: ${{secrets.DATABASE_USERNAME}}
       SECRET_KEY: ${{secrets.SECRET_KEY}}
       ALGORITHM: ${{secrets.ALGORITHM}}
-      ACCESS_TOKEN_EXPIRE_MINUTES: ${{ACCESS_TOKEN_EXPIRE_MINUTES}}
+      ACCESS_TOKEN_EXPIRE_MINUTES: ${{secrets.ACCESS_TOKEN_EXPIRE_MINUTES}}
     runs-on: ubuntu-latest
     steps:
       - name: Pulling git repository
