@@ -15,6 +15,7 @@ on: [push, pull_request]
 #   etc
 
 jobs:
+
   job1:
     #this let's us use a specific predefined environment in our repo
     environment: 
@@ -33,6 +34,21 @@ jobs:
       SECRET_KEY: ${{secrets.SECRET_KEY}}
       ALGORITHM: ${{secrets.ALGORITHM}}
       ACCESS_TOKEN_EXPIRE_MINUTES: ${{secrets.ACCESS_TOKEN_EXPIRE_MINUTES}}
+
+    services:
+      postgres:
+        image: postgres
+        env:
+          DATABSE_PASSWORD: ${{secrets.DATABSE_PASSWORD}}
+          DATABASE_DB: ${{secrets.DATABASE_NAME}}_test 
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+          
     runs-on: ubuntu-latest
     steps:
       - name: Pulling git repository
